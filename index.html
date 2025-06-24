@@ -586,7 +586,8 @@
             align-items: center;
         }
         #groupChatModal .modal-content,
-        #settingsModal .modal-content { /* Apply similar styling to settings modal */
+        #settingsModal .modal-content,
+        #sharePostModal .modal-content { /* Apply similar styling to settings and share modals */
             height: auto; /* Chat needs dynamic height, settings can be auto */
             display: flex;
             flex-direction: column;
@@ -595,7 +596,8 @@
             color: var(--text-color-light);
         }
         html[data-theme="dark"] #groupChatModal .modal-content,
-        html[data-theme="dark"] #settingsModal .modal-content {
+        html[data-theme="dark"] #settingsModal .modal-content,
+        html[data-theme="dark"] #sharePostModal .modal-content {
             background: var(--dashboard-bg-dark);
             color: var(--text-color-dark);
         }
@@ -606,7 +608,8 @@
         #createNoteModal .modal-header, /* Added for consistency */
         #editNoteModal .modal-header, /* Added for consistency */
         #createDeadlineModal .modal-header, /* Added for consistency */
-        #createGroupModal .modal-header /* Added for consistency */
+        #createGroupModal .modal-header, /* Added for consistency */
+        #sharePostModal .modal-header /* Added for consistency */
         {
             background: var(--primary-gradient);
             color: white;
@@ -619,7 +622,8 @@
         html[data-theme="dark"] #createNoteModal .modal-header, /* Added for consistency */
         html[data-theme="dark"] #editNoteModal .modal-header, /* Added for consistency */
         html[data-theme="dark"] #createDeadlineModal .modal-header, /* Added for consistency */
-        html[data-theme="dark"] #createGroupModal .modal-header /* Added for consistency */
+        html[data-theme="dark"] #createGroupModal .modal-header, /* Added for consistency */
+        html[data-theme="dark"] #sharePostModal .modal-header /* Added for consistency */
         {
             background: var(--dark-gradient) !important;
         }
@@ -834,6 +838,117 @@
             transform: translateX(26px);
         }
 
+        /* New styles for Share Modal buttons */
+        .share-modal-btn {
+            background: var(--card-bg-light);
+            border: 1px solid var(--card-border-light);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-color-light);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        html[data-theme="dark"] .share-modal-btn {
+            background: var(--card-bg-dark);
+            border-color: var(--card-border-dark);
+            color: var(--text-color-dark);
+        }
+
+        .share-modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            color: var(--text-color-light); /* Maintain color on hover */
+        }
+        html[data-theme="dark"] .share-modal-btn:hover {
+            color: var(--text-color-dark);
+        }
+
+        .share-modal-btn i {
+            font-size: 1.5rem;
+        }
+        .share-modal-btn.whatsapp i { color: #25D366; }
+        .share-modal-btn.facebook i { color: #1877F2; }
+        .share-modal-btn.linkedin i { color: #0A66C2; }
+        .share-modal-btn.copy-link i { color: #6c757d; }
+        .share-modal-btn.innovatehub i { color: #667eea; }
+
+        /* Comment Section styles */
+        .comments-section {
+            border-top: 1px solid var(--card-border-light);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        html[data-theme="dark"] .comments-section {
+            border-color: var(--card-border-dark);
+        }
+
+        .comment-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            background-color: var(--chat-other-bubble-bg-light); /* Lighter background for comments */
+            border-radius: 12px;
+            padding: 0.75rem;
+        }
+        html[data-theme="dark"] .comment-item {
+            background-color: var(--chat-other-bubble-bg-dark);
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            margin-right: 0.75rem;
+        }
+        html[data-theme="dark"] .comment-avatar {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+
+        .comment-content-wrapper {
+            flex-grow: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+        }
+        html[data-theme="dark"] .comment-author {
+            color: var(--text-color-dark);
+        }
+
+        .comment-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+            color: var(--chat-other-bubble-text-light);
+        }
+        html[data-theme="dark"] .comment-text {
+            color: var(--chat-other-bubble-text-dark);
+        }
+
+        .comment-time {
+            font-size: 0.7rem;
+            color: var(--chat-time-color-light);
+            text-align: right;
+        }
+        html[data-theme="dark"] .comment-time {
+            color: var(--chat-time-color-dark);
+        }
     </style>
 </head>
 <body>
@@ -1330,6 +1445,38 @@
         </div>
     </div>
 
+    <!-- Share Post Modal (NEW) -->
+    <div class="modal fade" id="sharePostModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-share-alt me-2"></i>Share Post</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted text-center mb-4">Share this post with your connections!</p>
+                    <div class="d-grid gap-3">
+                        <a href="#" id="shareWhatsapp" class="share-modal-btn whatsapp" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-whatsapp"></i> Share on WhatsApp
+                        </a>
+                        <a href="#" id="shareFacebook" class="share-modal-btn facebook" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-facebook"></i> Share on Facebook
+                        </a>
+                        <a href="#" id="shareLinkedin" class="share-modal-btn linkedin" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin"></i> Share on LinkedIn
+                        </a>
+                        <button type="button" id="copyLinkBtn" class="share-modal-btn copy-link">
+                            <i class="fas fa-copy"></i> Copy Link
+                        </button>
+                        <button type="button" id="shareToInnovateHubGroupBtn" class="share-modal-btn innovatehub">
+                            <i class="fas fa-users"></i> Share to InnovateHub Group
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Modal (NEW) -->
     <div class="modal fade" id="settingsModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -1410,7 +1557,7 @@
 
         // Modal Instances - declared here for global access
         // They will be initialized inside DOMContentLoaded to ensure elements exist
-        let loginModal, signupModal, createNoteModal, editNoteModal, confirmModal, createDeadlineModal, createGroupModal, groupChatModal, settingsModal; 
+        let loginModal, signupModal, createNoteModal, editNoteModal, confirmModal, createDeadlineModal, createGroupModal, groupChatModal, settingsModal, sharePostModal; 
 
         // API Helper Functions
         async function apiCall(endpoint, options = {}) {
@@ -1454,6 +1601,7 @@
             createGroupModal = new bootstrap.Modal(document.getElementById('createGroupModal'));
             groupChatModal = new bootstrap.Modal(document.getElementById('groupChatModal'));
             settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+            sharePostModal = new bootstrap.Modal(document.getElementById('sharePostModal')); // Initialize new share modal
 
             // Event Listeners for Forms
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
@@ -1523,6 +1671,17 @@
                 fetchStudyGroups(true);
                 document.getElementById('btnMyGroups').classList.add('active');
                 document.getElementById('btnAllGroups').classList.remove('active');
+            });
+
+            // Share Modal Button Listeners (Delegated listeners or added inside showShareOptions)
+            document.getElementById('copyLinkBtn').addEventListener('click', () => copyPostLink(document.getElementById('shareWhatsapp').href));
+            document.getElementById('shareToInnovateHubGroupBtn').addEventListener('click', () => {
+                // Assuming the post URL is still relevant from the last opened share modal
+                const postUrl = document.getElementById('shareWhatsapp').href; 
+                // Extract postId from URL for a more robust solution, or pass it via data attribute
+                const urlParts = postUrl.split('/');
+                const postId = urlParts[urlParts.length - 1]; // This is a simplistic extraction
+                shareToInnovateHubGroup(postId);
             });
 
 
@@ -1760,6 +1919,7 @@
         function showCreateDeadlineModal() { createDeadlineModal.show(); }
         function showCreateGroupModal() { createGroupModal.show(); }
         function showGroupChatModal() { groupChatModal.show(); }
+        function showSharePostModal() { sharePostModal.show(); } // New helper for share modal
         // NEW: Show Settings Modal and populate profile fields
         function showSettingsModal() {
             if (currentUser) {
@@ -1841,7 +2001,7 @@
 
         function toggleTrendingTopics(event, explicitState = null) {
             const trendingTopicsCard = document.getElementById('trendingTopicsCard');
-            if (trendingTopicsCard) { // Ensure the element exists before trying to manipulate it
+            if (trendingTopicsCard) { // Guard against element not existing if hidden by settings
                 if (explicitState !== null) {
                     userSettings.showTrending = explicitState;
                 } else {
@@ -2017,6 +2177,9 @@
                     }
                 }
 
+                // Initial comments array (empty for now, populate from backend if available)
+                const postComments = post.comments || []; 
+
                 postElement.innerHTML = `
                     <div class="p-4">
                         <div class="d-flex align-items-center mb-3">
@@ -2026,6 +2189,11 @@
                                 <small class="text-muted">${post.user ? `${post.user.course} from ${post.user.college}` : 'N/A'}</small>
                             </div>
                             <span class="ms-auto post-type-badge ${typeClass}">${post.type}</span>
+                            ${currentUser && post.user && post.user._id === currentUser._id ? `
+                                <button class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDeletePost('${post._id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
                         </div>
                         <h4 class="mb-2">${post.title}</h4>
                         <p class="text-muted mb-3">${post.content}</p>
@@ -2035,18 +2203,33 @@
                                 <button class="btn-action ${likeButtonClass}" onclick="toggleLike('${post._id}')">
                                     <i class="fas fa-heart"></i> ${likeCount} Likes
                                 </button>
-                                <button class="btn-action">
-                                    <i class="fas fa-comment"></i> ${post.comments || 0} Comments
+                                <button class="btn-action" onclick="toggleCommentsSection('${post._id}')">
+                                    <i class="fas fa-comment"></i> <span id="commentCount-${post._id}">${postComments.length}</span> Comments
                                 </button>
-                                <button class="btn-action">
+                                <button class="btn-action" onclick="showShareOptions('${post._id}', '${encodeURIComponent(post.title)}')">
                                     <i class="fas fa-share"></i> Share
                                 </button>
                             </div>
                             <small class="text-muted">${new Date(post.createdAt).toLocaleDateString()}</small>
                         </div>
+                        
+                        <!-- Comments Section for each post -->
+                        <div id="commentsSection-${post._id}" class="comments-section" style="display: none;">
+                            <h6>Comments</h6>
+                            <div id="commentsContainer-${post._id}" class="mb-3">
+                                <!-- Comments will be dynamically loaded here -->
+                                <p class="text-muted small">No comments yet. Be the first to comment!</p>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="commentInput-${post._id}" placeholder="Write a comment...">
+                                <button class="btn btn-gradient" type="button" onclick="submitComment('${post._id}')">Post</button>
+                            </div>
+                        </div>
                     </div>
                 `;
                 postsContainer.appendChild(postElement);
+                // Call render comments for each post
+                renderCommentsForPost(post._id, postComments); // Render any existing comments
             });
         }
 
@@ -2058,12 +2241,31 @@
                 if (postIndex > -1) {
                     posts[postIndex].likes = response.likes;
                     posts[postIndex].likedBy = Array.isArray(response.likedBy) ? response.likedBy : [];
-                    renderPosts();
+                    renderPosts(); // Re-render all posts to update the like count and button state
                 }
             } catch (error) {
                 showToast('Failed to like post: ' + error.message, 'error');
             }
         }
+
+        // New function to confirm and delete a post
+        function confirmDeletePost(postId) {
+            showCustomConfirm('Are you sure you want to delete this post? This action cannot be undone.', async () => {
+                try {
+                    await apiCall(`/posts/${postId}`, { method: 'DELETE' });
+                    posts = posts.filter(p => p._id !== postId); // Remove deleted post from local array
+                    renderPosts(); // Re-render posts to reflect deletion
+                    showToast('Post deleted successfully!', 'success');
+                    if (currentUser) {
+                        currentUser.postCount = Math.max(0, (currentUser.postCount || 0) - 1);
+                        document.getElementById('userPosts').textContent = currentUser.postCount;
+                    }
+                } catch (error) {
+                    showToast('Failed to delete post: ' + error.message, 'error');
+                }
+            });
+        }
+
 
         let searchTimeout;
         function handleSearch(e) {
@@ -2074,6 +2276,163 @@
             }, 500);
         }
 
+        // --- Comments Functionality (Frontend Only - Backend APIs needed for persistence) ---
+        function toggleCommentsSection(postId) {
+            const commentsSection = document.getElementById(`commentsSection-${postId}`);
+            if (commentsSection) {
+                if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
+                    commentsSection.style.display = 'block';
+                    // In a real app, you'd fetch comments here if not already loaded
+                    fetchAndRenderComments(postId); 
+                } else {
+                    commentsSection.style.display = 'none';
+                }
+            }
+        }
+
+        async function fetchAndRenderComments(postId) {
+            const commentsContainer = document.getElementById(`commentsContainer-${postId}`);
+            commentsContainer.innerHTML = '<div class="loading-spinner"></div>'; // Show loading spinner
+            try {
+                const data = await apiCall(`/posts/${postId}/comments`);
+                const comments = data.comments;
+                renderCommentsForPost(postId, comments);
+                document.getElementById(`commentCount-${postId}`).textContent = comments.length;
+            } catch (error) {
+                console.error('Failed to fetch comments:', error);
+                commentsContainer.innerHTML = '<p class="text-muted small">Could not load comments.</p>';
+            }
+        }
+
+
+        // Placeholder for submitting a comment (requires backend API)
+        async function submitComment(postId) {
+            if (!currentUser) { showToast('Please login to comment.', 'info'); showLoginModal(); return; }
+
+            const commentInput = document.getElementById(`commentInput-${postId}`);
+            const commentContent = commentInput.value.trim();
+
+            if (!commentContent) {
+                showToast('Comment cannot be empty.', 'error');
+                return;
+            }
+
+            try {
+                // Call the backend API to add the comment
+                const response = await apiCall(`/posts/${postId}/comments`, {
+                    method: 'POST',
+                    body: JSON.stringify({ content: commentContent })
+                });
+
+                // Update local posts array with the new comment and re-render
+                const postIndex = posts.findIndex(p => p._id === postId);
+                if (postIndex > -1) {
+                    // Replace the comments array with the updated one from the backend
+                    posts[postIndex].comments = response.comments; // Assuming backend returns updated comments array
+                    renderCommentsForPost(postId, posts[postIndex].comments); // Re-render comments for this specific post
+                    document.getElementById(`commentCount-${postId}`).textContent = posts[postIndex].comments.length;
+                    commentInput.value = ''; // Clear input
+                    showToast('Comment posted! 🎉', 'success');
+                }
+            } catch (error) {
+                showToast('Failed to post comment: ' + error.message, 'error');
+            }
+        }
+
+        // Function to render comments for a specific post
+        function renderCommentsForPost(postId, comments) {
+            const commentsContainer = document.getElementById(`commentsContainer-${postId}`);
+            if (!commentsContainer) return;
+
+            commentsContainer.innerHTML = ''; // Clear existing comments
+
+            if (comments.length === 0) {
+                commentsContainer.innerHTML = '<p class="text-muted small">No comments yet. Be the first to comment!</p>';
+                return;
+            }
+
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment-item');
+                commentElement.innerHTML = `
+                    <div class="comment-avatar">${comment.user ? comment.user.name.split(' ').map(n => n[0]).join('').toUpperCase() : '??'}</div>
+                    <div class="comment-content-wrapper">
+                        <div class="comment-author">${comment.user ? comment.user.name : 'Unknown User'}</div>
+                        <p class="comment-text">${comment.content}</p>
+                        <div class="comment-time">${new Date(comment.createdAt).toLocaleString()}</div>
+                    </div>
+                `;
+                // Add delete button for comments if current user is the owner of the comment or the post
+                const post = posts.find(p => p._id === postId);
+                if (currentUser && comment.user && (comment.user._id === currentUser._id || (post && post.user && post.user._id === currentUser._id))) {
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-sm', 'btn-link', 'text-danger', 'ms-2');
+                    deleteButton.innerHTML = '<i class="fas fa-times-circle"></i>';
+                    deleteButton.setAttribute('title', 'Delete Comment');
+                    deleteButton.onclick = () => confirmDeletePostComment(postId, comment._id);
+                    commentElement.querySelector('.comment-content-wrapper').appendChild(deleteButton);
+                }
+                commentsContainer.appendChild(commentElement);
+            });
+        }
+
+        // New function to confirm and delete a comment
+        function confirmDeletePostComment(postId, commentId) {
+            showCustomConfirm('Are you sure you want to delete this comment?', async () => {
+                try {
+                    await apiCall(`/posts/${postId}/comments/${commentId}`, { method: 'DELETE' });
+                    // After successful deletion, re-fetch and re-render comments for the specific post
+                    fetchAndRenderComments(postId);
+                    showToast('Comment deleted successfully!', 'success');
+                } catch (error) {
+                    showToast('Failed to delete comment: ' + error.message, 'error');
+                }
+            });
+        }
+
+
+        // --- Share Functionality ---
+        function showShareOptions(postId, postTitleEncoded) {
+            if (!currentUser) { showToast('Please login to share posts.', 'info'); showLoginModal(); return; }
+
+            const postTitle = decodeURIComponent(postTitleEncoded);
+            // Construct a dummy URL for the post (in a real app, this would be a permalink to the post)
+            const postUrl = `${window.location.origin}/posts/${postId}`; // Example permalink
+            
+            document.getElementById('shareWhatsapp').href = `https://wa.me/?text=${encodeURIComponent(postTitle)}%20${encodeURIComponent(postUrl)}`;
+            document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
+            document.getElementById('shareLinkedin').href = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(postUrl)}&title=${encodeURIComponent(postTitle)}&summary=&source=InnovateHub`;
+
+            // Store post ID for InnovateHub group sharing if needed
+            document.getElementById('shareToInnovateHubGroupBtn').dataset.postId = postId;
+
+            showSharePostModal();
+        }
+
+        function copyPostLink(postUrl) {
+            // Using document.execCommand('copy') as navigator.clipboard.writeText() might not work in some iframe environments
+            const tempInput = document.createElement('textarea');
+            tempInput.value = postUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast('Post link copied to clipboard! 🎉', 'success');
+            sharePostModal.hide();
+        }
+
+        // Placeholder for sharing to an InnovateHub group (requires further development)
+        function shareToInnovateHubGroup(postId) {
+            if (!currentUser) { showToast('Please login to share to groups.', 'info'); showLoginModal(); return; }
+            showToast(`Sharing post ${postId} to an InnovateHub group is not yet fully implemented. This would require selecting a group and sending a message to its chat with the post link.`, 'info');
+            sharePostModal.hide();
+            // Future implementation could involve:
+            // 1. Opening a new modal showing a list of user's groups.
+            // 2. User selects a group.
+            // 3. API call to /groups/:groupId/messages with the post link.
+        }
+
+        // --- Notes Functionality (rest of the functions are unchanged) ---
         async function handleCreateNote(e) {
             e.preventDefault();
             if (!currentUser) { showToast('Please login to create notes.', 'info'); showLoginModal(); return; }
